@@ -36,9 +36,5 @@ int main() {
     printf("After Free Name: %s\n", o->name);
     o->callback();  // call the function from the address, can be dangerous // its here that the real exploit it
 
-
-
-
-
     return 0;
 }
