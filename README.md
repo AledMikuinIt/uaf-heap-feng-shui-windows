@@ -36,7 +36,9 @@ Heap behavior may vary depending on the allocator and system configuration.
 However, on typical Windows environments, the following output is commonly observed:
 
 Initial Addr: 00007FF6FBEE1450
+
 After Free Addr: 4141414141414141
+
 After Free Name: Hello
 
 This shows that the freed heap chunk was reused and that the function pointer
