@@ -16,7 +16,7 @@ This repository demonstrates a controlled Use-After-Free on the
 Windows heap.
 
 By carefully ordering allocations and frees of objects with the
-same size, a freed heap chunk is deterministically reused,
+same size, a freed heap chunk is likely reused,
 allowing controlled data to overwrite a previously freed object.
 
 The demo shows how a function pointer can be hijacked via a UAF
