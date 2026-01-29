@@ -21,6 +21,19 @@ allowing controlled data to overwrite a previously freed object.
 
 The demo shows how a function pointer can be hijacked via a UAF
 when heap reuse occurs.
+The function pointer overwrite is intentional and used purely
+to make the UAF effect observable.
+
+## Scope & Limitations
+
+This demo:
+- demonstrates a controlled Use-After-Free scenario
+- shows basic heap reuse behavior
+
+This demo does NOT:
+- represent a real-world vulnerability
+- bypass modern heap mitigations
+- exploit allocator internals
 
 ---
 
@@ -28,18 +41,17 @@ when heap reuse occurs.
 Compile with GCC / MinGW:
 
 ```bash
-gcc -O0 -g -fno-omit-frame-pointer main.c -o main.exe
+gcc main.c -o main.exe
 ```
 
 ## Expected Result
 Heap behavior may vary depending on the allocator and system configuration.
 However, on typical Windows environments, the following output is commonly observed:
 
-Initial Addr: 00007FF6FBEE1450
+Current: 000001BFBE0196D0 | Next: 000001BFBE0193F0 | Callback: 00007FF6D5081450
+Hello
+Current: 000001BFBE0193F0 | Next: 0000000000000000 | Callback: 00007FF6D508146E
+UAF
 
-After Free Addr: 4141414141414141
-
-After Free Name: Hello
-
-This shows that the freed heap chunk was reused and that the function pointer
+This shows that the freed heap chunk is likely reused and that the function pointer
 was overwritten via a Use-After-Free condition.
