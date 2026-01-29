@@ -27,6 +27,10 @@ int main() {
     // allocation for the spray
     for(int i = 0; i < size; i++) {
         spray[i] = malloc(sizeof(Obj));
+        if(!spray[i]) {
+            printf("Spray Malloc Failed !\n");
+            return 1;
+        }
         spray[i]->current = NULL;
         spray[i]->next = NULL;
         spray[i]->callback = legit;
@@ -46,9 +50,17 @@ int main() {
     }
 
     
-    Obj *evil = malloc(sizeof(Obj)); // create evil obj for uaf
-    evil->callback = uaf;           // we put the uaf func on the callback on the evil obj, in hope that evil obj will be in a spray space
-    evil->next = NULL;              // nullify the next to stop pointer chasing so we have a control
+    Obj *evil[10];  // create 10 evil object for having more success chances
+    for(int i = 0; i < size; i++) {
+        evil[i] = malloc(sizeof(Obj));
+        if(!evil[i]) {
+            printf("Evil Malloc Failed !\n");
+            return 1;
+        }
+        evil[i]->callback = uaf;           // we put the uaf func on the callback on the evil obj, in hope that evil obj will be in a spray space
+        evil[i]->next = NULL; 
+    }
+                // nullify the next to stop pointer chasing so we have a control
 
     Obj *p = spray[0];
     // Loop on the spray for info printf
@@ -58,6 +70,10 @@ int main() {
         p = p->next;
     }
 
+    // we dont forget to free evil objects
+    for(int i = 0; i < size; i++) {
+        free(evil[i]);
+    }
     return 0;
     
 }
