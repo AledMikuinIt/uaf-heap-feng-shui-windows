@@ -49,8 +49,11 @@ Heap behavior may vary depending on the allocator and system configuration.
 However, on typical Windows environments, the following output is commonly observed:
 
 Current: 000001BFBE0196D0 | Next: 000001BFBE0193F0 | Callback: 00007FF6D5081450
+
 Hello
+
 Current: 000001BFBE0193F0 | Next: 0000000000000000 | Callback: 00007FF6D508146E
+
 UAF
 
 This shows that the freed heap chunk is likely reused and that the function pointer
