@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// struct Obj for pointer chasing & callback
 typedef struct _Obj {
     void *current;
     void * next;
     void (*callback)();
 } Obj;
 
-void legit() {
+// legit func for demo
+void legit() { 
     printf("Hello\n");
 }
 
+// uaf func for demo that if it prints "UAF" means bug exploit
 void uaf() {
     printf("UAF\n");
 }
@@ -21,6 +24,7 @@ int main() {
 
     Obj *spray[10];
 
+    // allocation for the spray
     for(int i = 0; i < size; i++) {
         spray[i] = malloc(sizeof(Obj));
         spray[i]->current = NULL;
@@ -28,6 +32,7 @@ int main() {
         spray[i]->callback = legit;
     }
 
+    // pointer chase
     for(int i = 0; i < size-1; i++) {
         spray[i]->next = spray[i+1];
         spray[i]->current = spray[i];
@@ -46,9 +51,9 @@ int main() {
     evil->next = NULL;              // nullify the next to stop pointer chasing so we have a control
 
     Obj *p = spray[0];
-    // Loop on the spray for info
+    // Loop on the spray for info printf
     while(p) {
-        printf("Current: %p | Next: %p | Callback: %p\n", p->current, p->next, p->callback);
+        printf("Current: %p | Next: %p | Callback: %p\n", p->current, p->next, p->callback);    // print the spray stuff (that was freed)
         p->callback();  // we call the callback func on spray object, but i MAY have been UAF by the evil
         p = p->next;
     }
